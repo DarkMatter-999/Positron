@@ -4,7 +4,7 @@ fn main() {
     let strr = "
 <html>
     <head>
-        <title>Title</title>
+        <title>TitleData</title>
     </head>
     <body>
     </body>

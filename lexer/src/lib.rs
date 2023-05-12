@@ -12,6 +12,13 @@ pub struct Body {
     pub child: Vec<BodyTag>
 }
 
+#[derive(Debug)]
+pub enum Token {
+    OpeningTag(String),
+    ClosingTag(String),
+    Data(String),
+}
+
 pub enum HeadTag {
     Title,
     Meta
@@ -27,30 +34,55 @@ pub enum BodyTag {
     P,
 }
 
+#[derive(Copy, Clone,PartialEq)]
+enum State {
+    Opening,
+    Closing,
+    Text,
+}
+
 pub fn parseTags(code: String) -> Vec<String> {
     let mut tags = Vec::new();
     let mut it = code.chars().peekable();
 
     let mut s = String::new();
-    let mut flag = true;
     while let Some(&c) = it.peek() {
         match c {
-        
             '<' => {
+                if s.len() > 0 {
+                    tags.push(s.clone());
+                    s = String::new();
+                }
                 it.next();
-                s = String::new();
-                flag = false;
+                s += &c.to_string();
             },
             'a'..='z' => {
                 it.next();
                 s += &c.to_string();
             },
-            '>' => {
+            'A'..='Z' => {
                 it.next();
-                flag = true;
-                tags.push(s.clone());
+                s += &c.to_string();
             }
-            _ => {it.next();}
+            '>' => { 
+                it.next();
+                s += &c.to_string();
+                tags.push(s.clone());
+
+                s = String::new();
+            },
+            '/' => {
+                it.next();
+                s += &c.to_string();
+            },
+            '\n' | ' ' | '\r' | '\t' => {
+                it.next();
+            }
+            _ => {
+                it.next();
+                s += &c.to_string();
+            }
+
         }
     }
 
