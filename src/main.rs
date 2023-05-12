@@ -1,4 +1,5 @@
 use lexer;
+use parser;
 
 fn main() {
     let strr = "
@@ -9,8 +10,11 @@ fn main() {
     <body>
     </body>
 </html>
-*/";
+";
 
-    let dom = lexer::HTML::new("DOM".to_string(), strr.to_string()) ;
-    
+    let lexemes = lexer::parseTags(strr.to_string());
+    println!("{:?}", lexemes);
+
+    let tokens = parser::tokenize(lexemes);
+    println!("{:?}", tokens);
 }

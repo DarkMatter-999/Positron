@@ -1,46 +1,3 @@
-pub struct HTML {
-    pub name: String,
-    pub head: Option<Head>,
-    pub body: Option<Body>,
-}
-
-pub struct Head {
-    pub child: Vec<HeadTag>
-}
-
-pub struct Body {
-    pub child: Vec<BodyTag>
-}
-
-#[derive(Debug)]
-pub enum Token {
-    OpeningTag(String),
-    ClosingTag(String),
-    Data(String),
-}
-
-pub enum HeadTag {
-    Title,
-    Meta
-}
-
-pub enum BodyTag {
-    H1,
-    H2,
-    H3,
-    H4,
-    H5,
-    H6,
-    P,
-}
-
-#[derive(Copy, Clone,PartialEq)]
-enum State {
-    Opening,
-    Closing,
-    Text,
-}
-
 pub fn parseTags(code: String) -> Vec<String> {
     let mut tags = Vec::new();
     let mut it = code.chars().peekable();
@@ -88,19 +45,4 @@ pub fn parseTags(code: String) -> Vec<String> {
 
     return tags;
 }
-
-impl HTML {
-    pub fn new(name: String, html: String) -> HTML {
-        println!("{:?}", parseTags(html));
-        Self {
-            name,
-            head: None,
-            body: None
-        }
-    }
-}
-
-//impl Head {
-    
-//}
 
