@@ -1,66 +1,59 @@
-pub struct HTML {
-    pub name: String,
-    pub head: Option<Head>,
-    pub body: Option<Body>,
-}
+mod datatypes;
+pub mod tokenizer;
 
-pub struct Head {
-    pub child: Vec<HeadTag>,
-}
+use datatypes::Element;
+use datatypes::Node;
+use datatypes::Token;
+use tokenizer::Tokenizer;
 
-pub struct Body {
-    pub child: Vec<BodyTag>,
-}
-
-#[derive(Debug)]
-pub enum Token {
-    OpeningTag(String),
-    ClosingTag(String),
-    Data(String),
-}
-
-pub enum HeadTag {
-    Title,
-    Meta,
-}
-
-pub enum BodyTag {
-    H1,
-    H2,
-    H3,
-    H4,
-    H5,
-    H6,
-    P,
-}
-
-pub fn tokenize(lexemes: Vec<String>) -> Vec<Token> {
-    let mut tokens: Vec<Token> = Vec::new();
-    for lexeme in lexemes {
-        if lexeme.as_bytes()[0] == '<' as u8 && lexeme.as_bytes()[lexeme.len() - 1] == '>' as u8 {
-            if lexeme.as_bytes()[1] == '/' as u8 {
-                tokens.push(Token::ClosingTag(
-                    (&lexeme[2..lexeme.len() - 1]).to_string(),
-                ))
-            } else {
-                tokens.push(Token::OpeningTag(
-                    (&lexeme[1..lexeme.len() - 1]).to_string(),
-                ))
+pub fn print_token(tokenizer: &mut Tokenizer) {
+    loop {
+        match tokenizer.next_token() {
+            Some(Token::OpeningTag(s)) => {
+                println!("{:?}", Token::OpeningTag(s));
             }
-        } else {
-            tokens.push(Token::Data(lexeme));
+            Some(Token::ClosingTag(s)) => {
+                println!("{:?}", Token::ClosingTag(s));
+            }
+            Some(Token::Data(d)) => {
+                println!("{:?}", Token::Data(d))
+            }
+            None => break,
         }
     }
-
-    return tokens;
 }
 
-impl HTML {
-    pub fn new(tokens: Vec<String>) -> HTML {
-        HTML {
-            name: "DOM".to_string(),
-            head: None,
-            body: None,
+pub fn parse_element(tokens: &[Token]) -> (Element, &[Token]) {
+    let mut element = Element::new("".to_string());
+
+    if let Some(Token::OpeningTag(tag_name)) = tokens.first() {
+        element.name = tag_name.clone();
+    } else {
+        panic!("Expected open tag");
+    }
+
+    let mut rest = &tokens[1..];
+
+    while let Some(token) = rest.first() {
+        match token {
+            Token::OpeningTag(_) => {
+                let (child, new_rest) = parse_element(rest);
+                element.add_child(Node::Element(child));
+                rest = new_rest;
+            }
+            Token::ClosingTag(tag_name) => {
+                if tag_name == &element.name {
+                    return (element, &rest[1..]);
+                } else {
+                    panic!("Mismatched tags");
+                }
+            }
+            Token::Data(text) => {
+                element.add_child(Node::Text(text.clone()));
+                rest = &rest[1..];
+            }
         }
     }
+
+    panic!("Expected close tag");
 }

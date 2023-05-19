@@ -6,13 +6,8 @@ version = 3
 name = "Positron"
 version = "0.1.0"
 dependencies = [
- "lexer",
  "parser",
 ]
-
-[[package]]
-name = "lexer"
-version = "0.1.0"
 
 [[package]]
 name = "parser"
