@@ -8,7 +8,7 @@ use parser::tokenizer::Tokenizer;
 fn main() {
     let html = "
 <html>
-    <head>
+    <head prop=test prop2=val2>
         <title>TitleData</title>
     </head>
     <body>

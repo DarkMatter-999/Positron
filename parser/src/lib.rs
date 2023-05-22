@@ -1,6 +1,7 @@
 pub mod css;
 mod datatypes;
 pub mod dom;
+pub mod styles;
 pub mod tokenizer;
 
 use datatypes::Element;

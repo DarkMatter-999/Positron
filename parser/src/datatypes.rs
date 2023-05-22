@@ -1,3 +1,5 @@
+use std::collections::{HashMap, HashSet};
+
 #[derive(Debug, Clone)]
 pub enum Token {
     OpeningTag(String),
@@ -26,9 +28,12 @@ pub enum Node {
     Text(String),
 }
 
+pub type AttrMap = HashMap<String, String>;
+
 #[derive(Debug)]
 pub struct Element {
     pub name: String,
+    pub attributes: AttrMap,
     children: Vec<Node>,
 }
 
@@ -37,6 +42,7 @@ impl Element {
         Element {
             name: name,
             children: Vec::new(),
+            attributes: HashMap::new(),
         }
     }
     pub fn add_child(&mut self, child: Node) {
@@ -50,6 +56,17 @@ impl Element {
                 Node::Element(element) => element.print(indent + 2),
                 Node::Text(text) => println!("{:indent$}{}", "", text, indent = indent + 2),
             }
+        }
+    }
+
+    pub fn id(&self) -> Option<&String> {
+        self.attributes.get("id")
+    }
+
+    pub fn classes(&self) -> HashSet<&str> {
+        match self.attributes.get("class") {
+            Some(classlist) => classlist.split(' ').collect(),
+            None => HashSet::new(),
         }
     }
 }

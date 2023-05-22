@@ -1,10 +1,26 @@
-use crate::{Element, Node, Token};
+use std::{collections::HashMap, println};
+
+use crate::{datatypes::AttrMap, Element, Node, Token};
 
 pub fn parse_element(tokens: &[Token]) -> (Element, &[Token]) {
     let mut element = Element::new("".to_string());
 
     if let Some(Token::OpeningTag(tag_name)) = tokens.first() {
-        element.name = tag_name.clone();
+        match tag_name.split(' ').next().clone() {
+            Some(s) => element.name = s.to_string(),
+            None => {
+                panic!("No tagname");
+            }
+        }
+
+        for pair in tag_name.split_whitespace() {
+            let mut keyval = pair.split("=");
+            if let (Some(key), Some(value)) = (keyval.next(), keyval.next()) {
+                element
+                    .attributes
+                    .insert(key.to_string(), value.to_string());
+            }
+        }
     } else {
         panic!("Expected open tag");
     }

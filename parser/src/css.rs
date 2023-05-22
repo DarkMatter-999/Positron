@@ -12,15 +12,15 @@ struct Rule {
 }
 
 #[derive(Debug)]
-enum Selector {
+pub enum Selector {
     Simple(SimpleSelector),
 }
 
 #[derive(Debug)]
 pub struct SimpleSelector {
-    tag: Option<String>,
-    id: Option<String>,
-    class: Vec<String>,
+    pub tag: Option<String>,
+    pub id: Option<String>,
+    pub class: Vec<String>,
 }
 
 #[derive(Debug)]
@@ -30,21 +30,21 @@ struct Declaration {
 }
 
 #[derive(Debug)]
-enum Value {
+pub enum Value {
     Keyword(String),
     Length(f32, Unit),
     Color(Color),
 }
 
 #[derive(Debug)]
-enum Unit {
+pub enum Unit {
     Px,
     Em,
     Pr,
 }
 
 #[derive(Debug)]
-struct Color {
+pub struct Color {
     r: u8,
     g: u8,
     b: u8,
