@@ -1,10 +1,12 @@
 use std::println;
 
+use parser::css::parse_css;
+use parser::dom::parse_element;
+use parser::print_token;
 use parser::tokenizer::Tokenizer;
-use parser::{parse_element, print_token};
 
 fn main() {
-    let strr = "
+    let html = "
 <html>
     <head>
         <title>TitleData</title>
@@ -14,11 +16,23 @@ fn main() {
     </body>
 </html>
 ";
-
-    let mut tokenizer = Tokenizer::new(strr);
+    let css = "
+        * {
+            heh: #101010; 
+        }
+        .body {
+            test: 1px;
+            prop2: #ff7700;
+        }
+        #test { prop1: 1px; }
+        p {
+            prop3: 1000px;
+        }
+        ";
+    let mut tokenizer = Tokenizer::new(html);
     print_token(&mut tokenizer);
 
-    let mut tokenizer = Tokenizer::new(strr);
+    let mut tokenizer = Tokenizer::new(html);
     let mut tokens = Vec::new();
 
     while let Some(token) = tokenizer.next_token() {
@@ -28,4 +42,8 @@ fn main() {
 
     let (element, _) = parse_element(&tokens);
     println!("{:#?}", element);
+
+    let mut stylesheet = parse_css(css.to_string());
+
+    println!("{:#?}", stylesheet);
 }
