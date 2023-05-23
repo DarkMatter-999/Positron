@@ -34,7 +34,7 @@ pub type AttrMap = HashMap<String, String>;
 pub struct Element {
     pub name: String,
     pub attributes: AttrMap,
-    children: Vec<Node>,
+    pub children: Vec<Node>,
 }
 
 impl Element {

@@ -2,13 +2,13 @@ use std::{println, str::Chars};
 
 #[derive(Debug)]
 pub struct Stylesheet {
-    rules: Vec<Rule>,
+    pub rules: Vec<Rule>,
 }
 
 #[derive(Debug)]
-struct Rule {
-    selector: Vec<Selector>,
-    declaration: Vec<Declaration>,
+pub struct Rule {
+    pub selector: Vec<Selector>,
+    pub declaration: Vec<Declaration>,
 }
 
 #[derive(Debug)]
@@ -24,26 +24,26 @@ pub struct SimpleSelector {
 }
 
 #[derive(Debug)]
-struct Declaration {
-    name: String,
-    value: Value,
+pub struct Declaration {
+    pub name: String,
+    pub value: Value,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Value {
     Keyword(String),
     Length(f32, Unit),
     Color(Color),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Unit {
     Px,
     Em,
     Pr,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Color {
     r: u8,
     g: u8,

@@ -1,8 +1,10 @@
 use std::println;
 
 use parser::css::parse_css;
+use parser::datatypes::Node;
 use parser::dom::parse_element;
 use parser::print_token;
+use parser::styles::style_tree;
 use parser::tokenizer::Tokenizer;
 
 fn main() {
@@ -27,6 +29,9 @@ fn main() {
         #test { prop1: 1px; }
         p {
             prop3: 1000px;
+        },
+        head {
+            color: #FFFFFF;
         }
         ";
     let mut tokenizer = Tokenizer::new(html);
@@ -46,4 +51,8 @@ fn main() {
     let mut stylesheet = parse_css(css.to_string());
 
     println!("{:#?}", stylesheet);
+
+    let mut node = Node::Element(element);
+    let mut style_tree = style_tree(&node, &stylesheet);
+    println!("{:#?}", style_tree);
 }

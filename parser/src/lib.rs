@@ -1,5 +1,5 @@
 pub mod css;
-mod datatypes;
+pub mod datatypes;
 pub mod dom;
 pub mod styles;
 pub mod tokenizer;
