@@ -12,8 +12,31 @@ type MatchedRule<'a> = (Specificity, &'a Rule);
 #[derive(Debug)]
 pub struct StyleNode<'a> {
     node: &'a Node,
-    style_values: PropertyMap,
-    children: Option<Vec<StyleNode<'a>>>,
+    pub style_values: PropertyMap,
+    pub children: Vec<StyleNode<'a>>,
+}
+
+pub enum Display {
+    Inline,
+    Block,
+    None,
+}
+
+impl<'a> StyleNode<'a> {
+    pub fn value(&self, name: &str) -> Option<Value> {
+        self.style_values.get(name).cloned()
+    }
+
+    pub fn display(&self) -> Display {
+        match self.value("display") {
+            Some(Value::Keyword(s)) => match &*s {
+                "block" => Display::Block,
+                "none" => Display::None,
+                _ => Display::Inline,
+            },
+            _ => Display::Inline,
+        }
+    }
 }
 
 fn matches(elem: &Element, selector: &Selector) -> bool {
@@ -81,14 +104,12 @@ pub fn style_tree<'a>(root: &'a Node, stylesheet: &'a Stylesheet) -> StyleNode<'
             Node::Text(_) => HashMap::new(),
         },
         children: if let Node::Element(ref elem) = root {
-            Some(
-                elem.children
-                    .iter()
-                    .map(|child| style_tree(child, stylesheet))
-                    .collect(),
-            )
+            elem.children
+                .iter()
+                .map(|child| style_tree(child, stylesheet))
+                .collect()
         } else {
-            None
+            Vec::new()
         },
     }
 }

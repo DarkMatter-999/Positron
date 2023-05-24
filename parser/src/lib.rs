@@ -1,3 +1,4 @@
+pub mod boxmodel;
 pub mod css;
 pub mod datatypes;
 pub mod dom;
