@@ -1,5 +1,6 @@
 use std::println;
 
+use parser::boxmodel::{build_layout_tree, layout_tree};
 use parser::css::parse_css;
 use parser::datatypes::Node;
 use parser::dom::parse_element;
@@ -20,18 +21,16 @@ fn main() {
 ";
     let css = "
         * {
-            heh: #101010; 
+            display: block;
         }
-        .body {
-            test: 1px;
-            prop2: #ff7700;
+        body {
+            margin: 10px;
+            padding: 20px;
         }
-        #test { prop1: 1px; }
         p {
-            prop3: 1000px;
-        },
-        head {
-            color: #FFFFFF;
+            margin:100px;
+            padding: 50px;
+            border: 20px;
         }
         ";
     let mut tokenizer = Tokenizer::new(html);
@@ -55,4 +54,7 @@ fn main() {
     let mut node = Node::Element(element);
     let mut style_tree = style_tree(&node, &stylesheet);
     println!("{:#?}", style_tree);
+
+    let mut layout = layout_tree(&style_tree);
+    println!("{:#?}", layout);
 }
