@@ -11,7 +11,7 @@ type MatchedRule<'a> = (Specificity, &'a Rule);
 
 #[derive(Debug)]
 pub struct StyleNode<'a> {
-    node: &'a Node,
+    pub node: &'a Node,
     pub style_values: PropertyMap,
     pub children: Vec<StyleNode<'a>>,
 }

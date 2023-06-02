@@ -7,38 +7,38 @@ use crate::{
 };
 
 #[derive(Default, Clone, Copy, Debug)]
-struct Dimension {
-    content: Rect,
-    padding: EdgeSize,
-    border: EdgeSize,
-    margin: EdgeSize,
+pub struct Dimension {
+    pub content: Rect,
+    pub padding: EdgeSize,
+    pub border: EdgeSize,
+    pub margin: EdgeSize,
 }
 
 #[derive(Default, Clone, Copy, Debug)]
-struct Rect {
-    x: f32,
-    y: f32,
-    height: f32,
-    width: f32,
+pub struct Rect {
+    pub x: f32,
+    pub y: f32,
+    pub height: f32,
+    pub width: f32,
 }
 
 #[derive(Default, Clone, Copy, Debug)]
-struct EdgeSize {
-    left: f32,
-    right: f32,
-    top: f32,
-    bottom: f32,
+pub struct EdgeSize {
+    pub left: f32,
+    pub right: f32,
+    pub top: f32,
+    pub bottom: f32,
 }
 
 #[derive(Debug)]
 pub struct LayoutBox<'a> {
-    dimensions: Dimension,
-    box_type: BoxType<'a>,
-    children: Vec<LayoutBox<'a>>,
+    pub dimensions: Dimension,
+    pub box_type: BoxType<'a>,
+    pub children: Vec<LayoutBox<'a>>,
 }
 
 #[derive(Debug)]
-enum BoxType<'a> {
+pub enum BoxType<'a> {
     BlockNode(&'a StyleNode<'a>),
     InlineNode(&'a StyleNode<'a>),
     AnonymousBlock,
@@ -284,7 +284,7 @@ impl Dimension {
     fn padding_box(&self) -> Rect {
         self.content.expanded_by(self.padding)
     }
-    fn border_box(&self) -> Rect {
+    pub fn border_box(&self) -> Rect {
         self.padding_box().expanded_by(self.border)
     }
     fn margin_box(&self) -> Rect {

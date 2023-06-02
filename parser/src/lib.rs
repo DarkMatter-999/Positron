@@ -1,6 +1,7 @@
 pub mod boxmodel;
 pub mod css;
 pub mod datatypes;
+pub mod display;
 pub mod dom;
 pub mod styles;
 pub mod tokenizer;
