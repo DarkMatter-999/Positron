@@ -5,6 +5,7 @@ pub mod display;
 pub mod dom;
 pub mod styles;
 pub mod tokenizer;
+pub mod window;
 
 use datatypes::Element;
 use datatypes::Node;

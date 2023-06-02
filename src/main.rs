@@ -8,6 +8,7 @@ use parser::dom::parse_element;
 use parser::print_token;
 use parser::styles::style_tree;
 use parser::tokenizer::Tokenizer;
+use parser::window::make_window;
 
 fn main() {
     let html = "
@@ -17,26 +18,38 @@ fn main() {
     </head>
     <body>
         <p>This is some text</p>
+        <p class=c1>one</p>
+        <p class=c2>two</p>
+        <p class=c3>three</p>
+        <p class=c4>four</p>
     </body>
 </html>
 ";
     let css = "
         * {
             display: block;
-            background-color: #FFFFFF;
-            color: #000000;
+            background: #000000;
         }
         body {
             margin: 10px;
-            padding: 20px;
             background: #FFFFFF;
         }
         p {
-            margin:100px;
-            padding: 50px;
-            border: 20px;
-            border-color: #000000;
-            background: #FF00FF;
+            padding: 10px;
+            margin: 10px;
+        }
+        .c1 {
+            background: #FF0000;
+        }
+        .c2 {
+            background: #00FF00;
+        }
+        .c3 {
+            background: #00FFFF;
+        }
+        .c4 {
+            background: #0000FF;
+            color: #000000;
         }
         ";
     let mut tokenizer = Tokenizer::new(html);
@@ -67,4 +80,6 @@ fn main() {
     let mut displaylist = build_display_list(&layout);
 
     println!("{:#?}", displaylist);
+
+    make_window(displaylist);
 }
