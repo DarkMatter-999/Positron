@@ -66,7 +66,7 @@ pub struct CSS {
 
 impl CSS {
     pub fn new(input: String) -> Self {
-        let mut chars = input;
+        let chars = input;
         CSS {
             pos: 0,
             chars: chars,

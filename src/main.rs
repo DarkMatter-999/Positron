@@ -1,9 +1,7 @@
-use std::println;
-
-use parser::boxmodel::{build_layout_tree, layout_tree};
+use parser::boxmodel::layout_tree;
 use parser::css::parse_css;
 use parser::datatypes::Node;
-use parser::display::{build_display_list, DisplayCommand};
+use parser::display::build_display_list;
 use parser::dom::parse_element;
 use parser::print_token;
 use parser::styles::style_tree;
@@ -32,24 +30,31 @@ fn main() {
             display: block;
             background: #000000;
         }
+        head {
+            display: none;
+        }
         body {
             margin: 10px;
             background: #FFFFFF;
         }
         p {
-            padding: 10px;
             margin: 10px;
+            font-size: 48px;
+            padding: 20px;
             color: #FFFFFF;
             border-width: 10px;
             border-color: #FF77FF;
         }
         .c1 {
+            padding: 0px;
             background: #FF0000;
         }
         .c2 {
+            border-width: 0px;
             background: #00FF00;
         }
         .c3 {
+            width: 100px;
             background: #00FFFF;
         }
         .c4 {
@@ -66,7 +71,7 @@ fn main() {
         }
         ";
     let mut tokenizer = Tokenizer::new(html);
-    print_token(&mut tokenizer);
+    // print_token(&mut tokenizer);
 
     let mut tokenizer = Tokenizer::new(html);
     let mut tokens = Vec::new();
@@ -74,25 +79,25 @@ fn main() {
     while let Some(token) = tokenizer.next_token() {
         tokens.push(token);
     }
-    println!("{:?}", tokens);
+    // println!("{:?}", tokens);
 
     let (element, _) = parse_element(&tokens);
-    println!("{:#?}", element);
+    // println!("{:#?}", element);
 
     let stylesheet = parse_css(css.to_string());
 
-    println!("{:#?}", stylesheet);
+    // println!("{:#?}", stylesheet);
 
     let node = Node::Element(element);
     let style_tree = style_tree(&node, &stylesheet);
-    println!("{:#?}", style_tree);
+    // println!("{:#?}", style_tree);
 
     let layout = layout_tree(&style_tree);
-    println!("{:#?}", layout);
+    // println!("{:#?}", layout);
 
     let displaylist = build_display_list(&layout);
 
-    println!("{:#?}", displaylist);
+    // println!("{:#?}", displaylist);
 
     make_window(displaylist);
 }

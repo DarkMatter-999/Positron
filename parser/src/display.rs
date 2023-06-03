@@ -122,11 +122,19 @@ fn render_text(list: &mut DisplayList, layout_box: &LayoutBox) {
         BoxType::AnonymousBlock => None,
     };
 
+    let d = &layout_box.dimensions;
+    let border_box = d.border_box();
+
     match text {
         Some(t) => {
             list.push(DisplayCommand::Text(
                 color,
-                layout_box.dimensions.border_box(),
+                Rect {
+                    x: border_box.x + d.border.left + d.padding.left,
+                    y: border_box.y + d.border.top + d.padding.top,
+                    height: d.content.height,
+                    width: d.content.width,
+                },
                 t.to_string(),
             ));
         }

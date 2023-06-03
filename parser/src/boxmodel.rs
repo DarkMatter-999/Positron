@@ -3,6 +3,7 @@ use crate::{
         Unit::Px,
         Value::{self, Length},
     },
+    datatypes::Node,
     styles::{Display, StyleNode},
 };
 
@@ -220,8 +221,20 @@ impl<'a> LayoutBox<'a> {
     }
 
     fn calculate_block_height(&mut self) {
-        if let Some(Length(h, Px)) = self.get_style_node().value("height") {
+        let style = self.get_style_node();
+        if let Some(Length(h, Px)) = style.value("height") {
             self.dimensions.content.height = h;
+        }
+
+        if let Some(snode) = style.children.first() {
+            match snode.node {
+                Node::Element(_) => {}
+                Node::Text(text) => {
+                    if let Some(Length(h, Px)) = style.value("font-size") {
+                        self.dimensions.content.height = h;
+                    }
+                }
+            }
         }
     }
 }
