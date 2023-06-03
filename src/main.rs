@@ -22,6 +22,8 @@ fn main() {
         <p class=c2>two</p>
         <p class=c3>three</p>
         <p class=c4>four</p>
+
+        <h1> Helloooo </h1>
     </body>
 </html>
 ";
@@ -37,6 +39,9 @@ fn main() {
         p {
             padding: 10px;
             margin: 10px;
+            color: #FFFFFF;
+            border-width: 10px;
+            border-color: #FF77FF;
         }
         .c1 {
             background: #FF0000;
@@ -50,6 +55,14 @@ fn main() {
         .c4 {
             background: #0000FF;
             color: #000000;
+        }
+        h1 {
+            padding: 50px;
+            color: #000000;
+            background: #FF7700;
+            margin: 20px;
+            border-width: 40px;
+            border-color: #FF0000;
         }
         ";
     let mut tokenizer = Tokenizer::new(html);
@@ -66,18 +79,18 @@ fn main() {
     let (element, _) = parse_element(&tokens);
     println!("{:#?}", element);
 
-    let mut stylesheet = parse_css(css.to_string());
+    let stylesheet = parse_css(css.to_string());
 
     println!("{:#?}", stylesheet);
 
-    let mut node = Node::Element(element);
-    let mut style_tree = style_tree(&node, &stylesheet);
+    let node = Node::Element(element);
+    let style_tree = style_tree(&node, &stylesheet);
     println!("{:#?}", style_tree);
 
-    let mut layout = layout_tree(&style_tree);
+    let layout = layout_tree(&style_tree);
     println!("{:#?}", layout);
 
-    let mut displaylist = build_display_list(&layout);
+    let displaylist = build_display_list(&layout);
 
     println!("{:#?}", displaylist);
 

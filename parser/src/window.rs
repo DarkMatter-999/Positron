@@ -6,6 +6,8 @@ use std::time::Duration;
 
 use crate::display::DisplayCommand;
 
+const FONT_SIZE: u16 = 128;
+
 pub fn make_window(displaylist: Vec<DisplayCommand>) -> Result<(), String> {
     let sdl_context = sdl2::init()?;
     let video_subsystem = sdl_context.video()?;
@@ -18,6 +20,12 @@ pub fn make_window(displaylist: Vec<DisplayCommand>) -> Result<(), String> {
         .map_err(|e| e.to_string())?;
 
     let mut canvas = window.into_canvas().build().map_err(|e| e.to_string())?;
+
+    let ttf_context = sdl2::ttf::init().map_err(|e| e.to_string())?;
+
+    let font = ttf_context.load_font("./assets/OpenSans-Regular.ttf", FONT_SIZE)?;
+
+    let texture_creator = canvas.texture_creator();
 
     canvas.set_draw_color(Color::RGB(255, 255, 255));
     canvas.clear();
@@ -51,13 +59,37 @@ pub fn make_window(displaylist: Vec<DisplayCommand>) -> Result<(), String> {
                     ))?;
                 }
                 DisplayCommand::Text(color, rect, text) => {
+                    let surface = font
+                        .render(text)
+                        .blended(Color::RGBA(color.r, color.g, color.b, color.a))
+                        .map_err(|e| e.to_string())?;
+
+                    let texture = texture_creator
+                        .create_texture_from_surface(&surface)
+                        .map_err(|e| e.to_string())?;
+
+                    canvas.copy(
+                        &texture,
+                        None,
+                        Some(Rect::new(
+                            rect.x as i32,
+                            rect.y as i32,
+                            (text.len() as u32 * (rect.height as f32 * 0.40) as u32) as u32,
+                            rect.height as u32,
+                        )),
+                    )?;
+
+                    /*
                     canvas.set_draw_color(Color::RGBA(color.r, color.g, color.b, color.a));
+
                     canvas.fill_rect(Rect::new(
                         rect.x as i32,
                         rect.y as i32,
                         rect.width as u32,
                         rect.height as u32,
                     ))?;
+
+                    */
                 }
             }
         }
