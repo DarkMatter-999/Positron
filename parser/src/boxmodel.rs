@@ -240,13 +240,13 @@ impl<'a> LayoutBox<'a> {
 }
 
 // Build Layout Tree with calculations
-pub fn layout_tree<'a>(node: &'a StyleNode<'a>) -> LayoutBox<'a> {
+pub fn layout_tree<'a>(width: f32, height: f32, node: &'a StyleNode<'a>) -> LayoutBox<'a> {
     let mut block = Dimension {
         content: Rect {
             x: 0.0,
             y: 0.0,
-            height: 600.0,
-            width: 800.0,
+            height,
+            width,
         },
         padding: EdgeSize {
             left: 0.0,

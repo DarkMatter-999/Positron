@@ -8,6 +8,9 @@ use parser::styles::style_tree;
 use parser::tokenizer::Tokenizer;
 use parser::window::make_window;
 
+const width: u32 = 800;
+const height: u32 = 600;
+
 fn main() {
     let html = "
 <html>
@@ -92,12 +95,12 @@ fn main() {
     let style_tree = style_tree(&node, &stylesheet);
     // println!("{:#?}", style_tree);
 
-    let layout = layout_tree(&style_tree);
+    let layout = layout_tree(width as f32, height as f32, &style_tree);
     // println!("{:#?}", layout);
 
     let displaylist = build_display_list(&layout);
 
     // println!("{:#?}", displaylist);
 
-    make_window(displaylist);
+    make_window(width, height, displaylist);
 }
